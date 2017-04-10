@@ -118,4 +118,27 @@ public class CaesarCipherModule : MonoBehaviour
         Debug.Log("[CaesarCipher] Offset is " + offset);
         DisplayText.text = new string(_solution.Select(ch => (char) ((ch - 'A' - offset + 26) % 26 + 'A')).ToArray());
     }
+
+    KMSelectable[] ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        if (!command.StartsWith("PRESS "))
+            return null;
+        command = command.Substring(6);
+
+        var btns = new List<KMSelectable>();
+        foreach (var ch in command)
+        {
+            if (ch == ' ')
+                continue;
+            var ix = -1;
+            for (int i = 0; i < ButtonLabels.Length; i++)
+                if (ButtonLabels[i].text[0] == ch)
+                    ix = i;
+            if (ix == -1)
+                return null;
+            btns.Add(Buttons[ix]);
+        }
+        return btns.ToArray();
+    }
 }
