@@ -18,8 +18,12 @@ public class CaesarCipherModule : MonoBehaviour
     private string _solution;
     private string _answerSoFar = "";
 
+    private int _moduleId;
+    private static int _moduleIdCounter = 1;
+
     void Start()
     {
+        _moduleId = _moduleIdCounter++;
         DisplayText.text = "";
         Module.OnActivate += Activate;
 
@@ -39,7 +43,7 @@ public class CaesarCipherModule : MonoBehaviour
                 Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, Buttons[j].transform);
                 Buttons[j].AddInteractionPunch();
                 _answerSoFar += letter;
-                Debug.Log("[CaesarCipher] You pressed " + letter + "; answer now " + _answerSoFar);
+                Debug.LogFormat("[CaesarCipher #{0}] You pressed {1}; answer now {2}", _moduleId, letter, _answerSoFar);
                 if (_answerSoFar.Length == _solution.Length)
                 {
                     if (_answerSoFar == _solution)
@@ -65,7 +69,7 @@ public class CaesarCipherModule : MonoBehaviour
             pool.RemoveAt(ix);
         }
 
-        Debug.Log("[CaesarCipher] Solution is " + _solution);
+        Debug.LogFormat("[CaesarCipher #{0}] Solution is {1}.", _moduleId, _solution);
     }
 
     private void Activate()
@@ -115,7 +119,7 @@ public class CaesarCipherModule : MonoBehaviour
                 offset += 1;
         }
 
-        Debug.Log("[CaesarCipher] Offset is " + offset);
+        Debug.LogFormat("[CaesarCipher #{0}] Offset is {1}.", _moduleId, offset);
         DisplayText.text = new string(_solution.Select(ch => (char) ((ch - 'A' - offset + 26) % 26 + 'A')).ToArray());
     }
 
