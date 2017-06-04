@@ -47,9 +47,15 @@ public class CaesarCipherModule : MonoBehaviour
                 if (_answerSoFar.Length == _solution.Length)
                 {
                     if (_answerSoFar == _solution)
+                    {
+                        Debug.LogFormat("[CaesarCipher #{0}] Module solved.", _moduleId);
                         Module.HandlePass();
+                    }
                     else
+                    {
+                        Debug.LogFormat("[CaesarCipher #{0}] Wrong answer.", _moduleId);
                         Module.HandleStrike();
+                    }
                     _answerSoFar = "";
                 }
                 return false;
@@ -68,8 +74,6 @@ public class CaesarCipherModule : MonoBehaviour
             _solution += pool[ix];
             pool.RemoveAt(ix);
         }
-
-        Debug.LogFormat("[CaesarCipher #{0}] Solution is {1}.", _moduleId, _solution);
     }
 
     private void Activate()
@@ -119,8 +123,10 @@ public class CaesarCipherModule : MonoBehaviour
                 offset += 1;
         }
 
-        Debug.LogFormat("[CaesarCipher #{0}] Offset is {1}.", _moduleId, offset);
         DisplayText.text = new string(_solution.Select(ch => (char) ((ch - 'A' - offset + 26) % 26 + 'A')).ToArray());
+        Debug.LogFormat("[CaesarCipher #{0}] Puzzle is {1}.", _moduleId, DisplayText.text);
+        Debug.LogFormat("[CaesarCipher #{0}] Offset is {1}.", _moduleId, offset);
+        Debug.LogFormat("[CaesarCipher #{0}] Solution is {1}.", _moduleId, _solution);
     }
 
     KMSelectable[] ProcessTwitchCommand(string command)
