@@ -129,6 +129,10 @@ public class CaesarCipherModule : MonoBehaviour
         Debug.LogFormat("[CaesarCipher #{0}] Solution is {1}.", _moduleId, _solution);
     }
 
+#pragma warning disable 414
+    private string TwitchHelpMessage = @"Enter the correct cipher text with “!{0} press K B Q I S”.";
+#pragma warning restore 414
+
     KMSelectable[] ProcessTwitchCommand(string command)
     {
         command = command.Trim().ToUpperInvariant();
