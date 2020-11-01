@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using CaesarCipher;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class CaesarCipherModule : MonoBehaviour
 
     private int _moduleId;
     private static int _moduleIdCounter = 1;
+    private bool _isSolved;
 
     void Start()
     {
@@ -50,6 +52,7 @@ public class CaesarCipherModule : MonoBehaviour
                     {
                         Debug.LogFormat("[CaesarCipher #{0}] Module solved.", _moduleId);
                         Module.HandlePass();
+                        _isSolved = true;
                     }
                     else
                     {
@@ -154,5 +157,18 @@ public class CaesarCipherModule : MonoBehaviour
             btns.Add(Buttons[ix]);
         }
         return btns.ToArray();
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (_isSolved || !_solution.StartsWith(_answerSoFar))
+            yield break;
+
+        for (var i = _answerSoFar.Length; i < _solution.Length; i++)
+        {
+            var buttonIx = Enumerable.Range(0, ButtonLabels.Length).First(ix => ButtonLabels[ix].text == _solution[i].ToString());
+            Buttons[buttonIx].OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }
